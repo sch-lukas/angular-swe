@@ -14,7 +14,8 @@ export class KeycloakService {
 
         await this.keycloak.init({
             onLoad: 'check-sso',
-            silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
+            silentCheckSsoRedirectUri:
+                window.location.origin + '/assets/silent-check-sso.html',
             pkceMethod: 'S256',
         });
     }
@@ -28,7 +29,9 @@ export class KeycloakService {
     }
 
     async logout(redirectUri?: string): Promise<void> {
-        await this.keycloak?.logout({ redirectUri: redirectUri ?? window.location.origin });
+        await this.keycloak?.logout({
+            redirectUri: redirectUri ?? window.location.origin,
+        });
     }
 
     isLoggedIn(): boolean {
