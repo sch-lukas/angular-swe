@@ -2,7 +2,7 @@
 
 Dieses Dokument beschreibt den minimalen Contract zwischen Frontend (Angular) und Backend (GraphQL).
 
-- GraphQL Endpoint: https://localhost:8443/graphql  # anpassen falls anders
+- GraphQL Endpoint: https://localhost:8443/graphql # anpassen falls anders
 - Auth: Keycloak (OIDC) für geschützte Mutations (create, update, delete). Rolle: `admin` für Schreibrechte.
 - Public Queries: searchBooks(query, filters, page, size) -> BookPage
 - Detail Query: bookById(id: ID!) -> Book
@@ -11,31 +11,32 @@ Dieses Dokument beschreibt den minimalen Contract zwischen Frontend (Angular) un
 Datamodel (DTOs) - vereinfachte Version:
 
 type Book {
-  id: ID!
-  title: String!
-  authors: [String!]
-  isbn: String
-  pages: Int
-  publishedAt: String
+id: ID!
+title: String!
+authors: [String!]
+isbn: String
+pages: Int
+publishedAt: String
 }
 
 input CreateBookInput {
-  title: String!
-  authors: [String!]
-  isbn: String
-  pages: Int
-  publishedAt: String
+title: String!
+authors: [String!]
+isbn: String
+pages: Int
+publishedAt: String
 }
 
 input UpdateBookInput {
-  title: String
-  authors: [String!]
-  isbn: String
-  pages: Int
-  publishedAt: String
+title: String
+authors: [String!]
+isbn: String
+pages: Int
+publishedAt: String
 }
 
 Fehlercodes:
+
 - UNAUTHORIZED: User nicht eingeloggt
 - FORBIDDEN: User hat nicht die nötige Rolle
 - VALIDATION_ERROR: Ungültige Eingabedaten
