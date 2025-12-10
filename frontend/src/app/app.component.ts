@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
-import { LandingComponent } from './pages/landing/landing.component';
+import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from './shared/header/header.component';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [HeaderComponent, LandingComponent],
-  template: `
-    <app-header></app-header>
-    <div class="container mt-4">
-      <app-landing></app-landing>
-    </div>
-  `
+    selector: 'app-root',
+    standalone: true,
+    imports: [HeaderComponent, AppRoutingModule],
+    template: `
+        <app-header></app-header>
+        <div class="container mt-4">
+            <router-outlet></router-outlet>
+        </div>
+    `,
 })
 export class AppComponent {}

@@ -2,17 +2,18 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { KeycloakService } from '../../core/keycloak.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   template: `
     <div class="app-header d-flex align-items-center">
       <div class="me-auto h5">Buch</div>
 
       <div class="me-3">
-        <button class="btn btn-outline-secondary btn-sm">Suche</button>
+        <a [routerLink]="['/suche']" class="btn btn-outline-secondary btn-sm">Suche</a>
       </div>
 
       <div *ngIf="!auth.isAuthenticated(); else logged" class="d-flex align-items-center">
