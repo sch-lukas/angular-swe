@@ -2,14 +2,11 @@
 
 Kurze Anleitung, damit andere Entwickler:innen das Angular-Frontend zügig lokal starten können.
 
-
 ```powershell
-PS C:\software-engineering\angular-swe\frontend> pnpm install --filter frontend
+PS C:\software-engineering\angular-swe\frontend> pnpm install
 ```
 
-
 Entweder per Filter aus dem Wurzelordner:
-
 
 ```powershell
 PS C:\software-engineering\angular-swe\frontend> pnpm start
