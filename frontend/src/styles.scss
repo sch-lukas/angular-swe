@@ -1,6 +1,7 @@
-@import '~bootstrap/scss/bootstrap';
+/* Global styles and small helpers */
+// Use the modern Dart Sass module system instead of deprecated @import
+@use 'bootstrap/scss/bootstrap' as *;
 
-/* App-spezifische globale Styles können hier hin */
-body {
-  background-color: #f8f9fa;
-}
+body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+
+.app-header { background: #f8f9fa; padding: 0.75rem 1rem; border-bottom: 1px solid #e5e5e5; }

@@ -1,44 +1,24 @@
 import { Injectable } from '@angular/core';
-import Keycloak, { KeycloakInstance } from 'keycloak-js';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+    providedIn: 'root',
+})
 export class KeycloakService {
-    private keycloak?: KeycloakInstance;
+    private tokenKey = 'frontend_auth_token';
 
-    async init(): Promise<void> {
-        this.keycloak = Keycloak({
-            url: 'http://localhost:8080',
-            realm: 'books-realm',
-            clientId: 'angular-frontend',
-        }) as KeycloakInstance;
-
-        await this.keycloak.init({
-            onLoad: 'check-sso',
-            silentCheckSsoRedirectUri:
-                window.location.origin + '/assets/silent-check-sso.html',
-            pkceMethod: 'S256',
-        });
+    loginDemo() {
+        localStorage.setItem(this.tokenKey, 'demo-token');
     }
 
-    getToken(): string | undefined {
-        return this.keycloak?.token;
+    logout() {
+        localStorage.removeItem(this.tokenKey);
     }
 
-    async login(): Promise<void> {
-        await this.keycloak?.login();
+    isAuthenticated(): boolean {
+        return !!localStorage.getItem(this.tokenKey);
     }
 
-    async logout(redirectUri?: string): Promise<void> {
-        await this.keycloak?.logout({
-            redirectUri: redirectUri ?? window.location.origin,
-        });
-    }
-
-    isLoggedIn(): boolean {
-        return !!this.keycloak?.authenticated;
-    }
-
-    hasRole(role: string): boolean {
-        return !!this.keycloak?.hasRealmRole(role);
+    getToken(): string | null {
+        return localStorage.getItem(this.tokenKey);
     }
 }
