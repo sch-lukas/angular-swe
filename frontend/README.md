@@ -13,3 +13,7 @@ PS C:\software-engineering\angular-swe\frontend> pnpm start
 ```
 
 Der Befehl startet `ng serve` und stellt die App auf `http://localhost:4200/` bereit.
+
+Login:
+admin
+p
