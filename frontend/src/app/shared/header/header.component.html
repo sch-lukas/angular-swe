@@ -1,0 +1,33 @@
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand">Buch</a>
+    <div class="d-flex align-items-center">
+      <a class="nav-link text-white me-3" routerLink="/">Suchen</a>
+
+      <div
+        *ngIf="!auth.isLoggedIn(); else loggedTpl"
+        class="d-flex align-items-center"
+      >
+        <input
+          class="form-control form-control-sm me-2"
+          placeholder="Benutzer"
+          [(ngModel)]="username"
+        />
+        <input
+          class="form-control form-control-sm me-2"
+          placeholder="Passwort"
+          type="password"
+          [(ngModel)]="password"
+        />
+        <button class="btn btn-sm btn-primary" (click)="login()">Log in</button>
+      </div>
+
+      <ng-template #loggedTpl>
+        <span class="text-white me-2">{{ auth.getUser() }}</span>
+        <button class="btn btn-sm btn-outline-light" (click)="logout()">
+          Logout
+        </button>
+      </ng-template>
+    </div>
+  </div>
+</nav>
