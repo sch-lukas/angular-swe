@@ -19,6 +19,9 @@
 # https://pnpm.io/settings#ignoredbuiltdependencies
 ignoredBuiltDependencies: ["@prisma/client", "@prisma/engines"]
 
+packages:
+  - frontend
+
 # https://pnpm.io/settings#minimumreleaseage
 # 1 Tag = 24 * 60 Minuten
 minimumReleaseAge: 1440
