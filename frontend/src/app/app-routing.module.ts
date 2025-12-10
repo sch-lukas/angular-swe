@@ -3,14 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { LandingComponent } from './pages/landing/landing.component';
 import { Suche } from './pages/suche/suche';
 
-const routes: Routes = [
-  { path: '', component: LandingComponent },
-  { path: 'suche', component: Suche },
-  { path: '**', redirectTo: '' }
+export const routes: Routes = [
+    { path: '', component: LandingComponent },
+    { path: 'suche', component: Suche },
+    { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

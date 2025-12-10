@@ -1,5 +1,9 @@
-import 'zone.js'; // Angular still relies on Zone.js for change detection
 import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
+import 'zone.js'; // Angular still relies on Zone.js for change detection
+import { routes } from './app/app-routing.module';
 import { AppComponent } from './app/app.component';
 // Simple standalone bootstrap for Angular 20
-bootstrapApplication(AppComponent).catch((err: any) => console.error(err));
+bootstrapApplication(AppComponent, {
+    providers: [provideRouter(routes)],
+}).catch((err: any) => console.error(err));
