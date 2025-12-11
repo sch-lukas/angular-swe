@@ -1,9 +1,12 @@
 # Gruppe 06
 
 Mitglieder:
--
 
-# Figma
+- Stockburger, Aaron
+- Akay, Marcus
+- Schulz, Lukas
+
+## Figma
 
 Link zum Figma Projekt:
 https://www.figma.com/design/nuOAs3Ty8FkJPdyGOVQnwg/Test-Design?node-id=28-183&t=eNv9UVpCGUamIhJb-4
