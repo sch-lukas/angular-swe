@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AppRoutingModule } from './app-routing.module';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { LandingComponent } from './pages/landing/landing.component';
 import { Suche } from './pages/suche/suche';
 import { HeaderComponent } from './shared/header/header.component';
@@ -7,7 +7,13 @@ import { HeaderComponent } from './shared/header/header.component';
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [HeaderComponent, AppRoutingModule, LandingComponent, Suche],
+    imports: [
+        HeaderComponent,
+        LandingComponent,
+        Suche,
+        RouterOutlet,
+        RouterLink,
+    ],
     template: `
         <app-header></app-header>
         <div class="container mt-4">
