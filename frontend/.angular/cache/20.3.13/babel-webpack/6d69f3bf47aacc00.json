@@ -1,1 +1,0 @@
-{"ast":null,"code":"import { bootstrapApplication } from '@angular/platform-browser';\nimport { AppComponent } from './app/app.component';\nimport './styles.scss';\n// Simple standalone bootstrap for Angular 20\nbootstrapApplication(AppComponent).catch(err => console.error(err));","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
