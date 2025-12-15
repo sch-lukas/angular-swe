@@ -47,6 +47,7 @@ import { KeycloakService } from '../../core/keycloak.service';
                     <button
                         *ngIf="auth.isAuthenticated()"
                         class="btn btn-success btn-sm me-2"
+                        (click)="navigateToNeu()"
                     >
                         Neu anlegen
                     </button>
@@ -71,6 +72,10 @@ export class HeaderComponent {
 
     navigateToSuche() {
         this.router.navigate(['/suche']);
+    }
+
+    navigateToNeu() {
+        this.router.navigate(['/neu']);
     }
 
     login() {
