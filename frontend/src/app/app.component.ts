@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { LandingComponent } from './pages/landing/landing.component';
-import { Suche } from './pages/suche/suche';
+import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/header/header.component';
 
 @Component({
@@ -9,10 +7,7 @@ import { HeaderComponent } from './shared/header/header.component';
     standalone: true,
     imports: [
         HeaderComponent,
-        LandingComponent,
-        Suche,
         RouterOutlet,
-        RouterLink,
     ],
     template: `
         <app-header></app-header>
