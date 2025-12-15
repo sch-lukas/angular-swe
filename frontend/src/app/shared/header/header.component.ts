@@ -10,7 +10,7 @@ import { KeycloakService } from '../../core/keycloak.service';
     imports: [CommonModule, FormsModule, RouterModule],
     template: `
         <div class="app-header d-flex align-items-center">
-            <div class="me-auto h5">Buch</div>
+            <a routerLink="/" class="me-auto h5 text-decoration-none">Buch</a>
 
             <div class="me-3">
                 <a
