@@ -65,6 +65,7 @@ import { KeycloakService } from '../../core/keycloak.service';
 export class HeaderComponent {
     user = '';
     pass = '';
+    loading = false;
     constructor(
         public auth: KeycloakService,
         private router: Router,
@@ -79,11 +80,28 @@ export class HeaderComponent {
     }
 
     login() {
-        if (this.user === 'admin' && this.pass === 'p') {
-            this.auth.loginDemo();
-        } else {
-            alert('Ungültige Zugangsdaten');
+        console.log('Login start, user:', this.user);
+        if (!this.user || !this.pass) {
+            alert('Bitte Benutzer und Passwort eingeben.');
+            return;
         }
+
+        this.loading = true;
+
+        this.auth.login(this.user, this.pass).subscribe({
+            next: () => {
+                console.log('Login success');
+                this.loading = false;
+            },
+            error: (err) => {
+                console.error('Login error', err);
+                this.loading = false;
+                alert(
+                    'Login fehlgeschlagen: ' +
+                        (err?.message || 'Bitte Daten prüfen'),
+                );
+            },
+        });
     }
 
     logout() {
