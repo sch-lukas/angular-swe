@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~21.0.0",
-    "@angular/cli": "~21.0.0",
+    "@angular/cli": "21.0.3",
     "@angular/compiler-cli": "~21.0.0",
     "parse5-html-rewriting-stream": "8.0.0",
     "sass": "^1.65.0",
