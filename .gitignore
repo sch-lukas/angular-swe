@@ -30,6 +30,7 @@ test/lasttest-locust/__pycache__
 test/lasttest-locust/.venv
 test/postman
 sonar-project.properties
+frontend/src/environments/environment.ts
 
 # Logs
 log
