@@ -1,1 +1,69 @@
-<p>suche works!</p>
+<div class="container mt-4">
+  <h2>Buchsuche</h2>
+  <hr />
+
+  <div class="card bg-light mb-4">
+    <div class="card-body">
+      <form [formGroup]="suchFormular" (ngSubmit)="suchen()">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Titel</label>
+            <input
+              type="text"
+              formControlName="titel"
+              class="form-control"
+              placeholder="Nach Titel suchen..."
+            />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">ISBN</label>
+            <input
+              type="text"
+              formControlName="isbn"
+              class="form-control"
+              placeholder="ISBN-Nummer..."
+            />
+          </div>
+          <div class="col-md-4 d-flex align-items-end">
+            <button
+              type="submit"
+              class="btn btn-primary w-100"
+              [disabled]="laden"
+            >
+              <span
+                *ngIf="laden"
+                class="spinner-border spinner-border-sm me-2"
+              ></span>
+              Suchen
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="buecher.length > 0; else noData">
+    <table class="table table-striped table-hover border">
+      <thead class="table-dark">
+        <tr>
+          <th>Titel</th>
+          <th>ISBN</th>
+          <th>Aktionen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let b of buecher">
+          <td><strong>{{ b.titel }}</strong></td>
+          <td><code>{{ b.isbn }}</code></td>
+          <td>
+            <button class="btn btn-sm btn-outline-info">Details</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noData>
+    <div *ngIf="!laden" class="alert alert-info">Keine Bücher gefunden.</div>
+  </ng-template>
+</div>

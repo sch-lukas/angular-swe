@@ -12,7 +12,7 @@ import { BuchService } from '../../core/buch.service';
 })
 export class Suche implements OnInit {
     suchFormular: FormGroup;
-    ergebnisse: any[] = [];
+    buecher: any[] = [];
     laden: boolean = false;
 
     constructor(
@@ -39,7 +39,7 @@ export class Suche implements OnInit {
 
         this.buchService.suche(filterWerte).subscribe({
             next: (daten) => {
-                this.ergebnisse = daten;
+                this.buecher = daten;
                 this.laden = false;
             },
             error: (err) => {
