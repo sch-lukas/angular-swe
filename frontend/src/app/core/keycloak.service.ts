@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map, tap, throwError } from 'rxjs';
+import { BehaviorSubject, map, tap, throwError } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -12,6 +12,8 @@ export class KeycloakService {
     private readonly tokenUrl = environment.keycloak.url;
     private readonly clientId = environment.keycloak.clientId;
     private readonly clientSecret = environment.keycloak.clientSecret;
+    private authState = new BehaviorSubject<boolean>(this.hasToken());
+    readonly authState$ = this.authState.asObservable();
 
     constructor(private http: HttpClient) {}
 
@@ -44,6 +46,7 @@ export class KeycloakService {
                     }
                     this.saveToken(res.access_token);
                     console.log('Token gespeichert');
+                    this.authState.next(true);
                 }),
                 map(() => void 0),
             );
@@ -52,10 +55,11 @@ export class KeycloakService {
     logout() {
         localStorage.removeItem(this.tokenKey);
         sessionStorage.removeItem(this.tokenKey);
+        this.authState.next(false);
     }
 
     isAuthenticated(): boolean {
-        return !!this.getToken();
+        return this.authState.value;
     }
 
     getToken(): string | null {
@@ -78,5 +82,12 @@ export class KeycloakService {
                 console.error('Konnte Token nicht speichern', e);
             }
         }
+    }
+
+    private hasToken(): boolean {
+        return (
+            !!localStorage.getItem(this.tokenKey) ||
+            !!sessionStorage.getItem(this.tokenKey)
+        );
     }
 }
