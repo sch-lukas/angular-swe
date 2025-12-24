@@ -17,3 +17,13 @@ Der Befehl startet `ng serve` und stellt die App auf `http://localhost:4200/` be
 Login:
 admin
 p
+
+## Keycloak (Dev) konfigurieren
+
+- Client `nest-client`:
+  - Web Origins: `http://localhost:4200`
+  - Valid Redirect URIs: `http://localhost:4200/*`
+  - Access Type: confidential
+  - Direct Access Grants: enabled
+- Token-URL (wird im Frontend genutzt): `https://localhost:8843/realms/nest/protocol/openid-connect/token`
+- Selbstsigniertes Zertifikat im Browser einmal akzeptieren, sonst schlägt der Token-Request mit Status 0 fehl.

@@ -1,6 +1,6 @@
 {
     "/auth": {
-        "target": "http://localhost:8880",
+        "target": "https://localhost:8843",
         "secure": false,
         "changeOrigin": true,
         "logLevel": "info",

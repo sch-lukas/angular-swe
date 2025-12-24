@@ -7,6 +7,17 @@ import {
     Validators,
 } from '@angular/forms';
 import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { HttpHeaders } from '@angular/common/http';
+import { Apollo, gql } from 'apollo-angular';
+import { KeycloakService } from '../../core/keycloak.service';
+
+const CREATE_MUTATION = gql`
+    mutation Create($input: BuchInput!) {
+        create(input: $input) {
+            id
+        }
+    }
+`;
 
 @Component({
     selector: 'app-neu',
@@ -200,28 +211,33 @@ import { NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 export class NeuComponent {
     artOptionen = ['EPUB', 'HARDCOVER', 'PAPERBACK'];
     ratingOptionen = [0, 1, 2, 3, 4, 5];
-    schlagwortKatalog = ['Angular', 'TypeScript', 'REST', 'GraphQL', 'NoSQL'];
+    schlagwortKatalog = ['JAVASCRIPT', 'TYPESCRIPT', 'JAVA', 'PYTHON'];
+    loading = false;
 
     readonly defaultWerte = {
-        titel: '',
-        untertitel: '',
-        isbn: '',
-        rating: 3,
-        art: 'HARDCOVER',
-        preis: 0,
-        rabatt: 0,
-        lieferbar: false,
-        datum: null as NgbDateStruct | null,
-        homepage: '',
+        titel: 'Der Titel',
+        untertitel: 'Der Untertitel',
+        isbn: '978-0-008-00644-0',
+        rating: 5,
+        art: 'EPUB',
+        preis: 1,
+        rabatt: 0.1,
+        lieferbar: true,
+        datum: { year: 2021, month: 1, day: 31 } as NgbDateStruct,
+        homepage: 'https://test.de/',
         schlagwoerter: this.schlagwortKatalog.reduce(
-            (acc, wort) => ({ ...acc, [wort]: false }),
+            (acc, wort) => ({ ...acc, [wort]: true }),
             {} as Record<string, boolean>,
         ),
     };
 
     form: FormGroup;
 
-    constructor(private fb: FormBuilder) {
+    constructor(
+        private fb: FormBuilder,
+        private apollo: Apollo,
+        private keycloak: KeycloakService,
+    ) {
         this.form = this.fb.group({
             titel: [this.defaultWerte.titel, Validators.required],
             untertitel: [this.defaultWerte.untertitel],
@@ -243,6 +259,12 @@ export class NeuComponent {
             return;
         }
 
+        const token = this.keycloak.getToken();
+        if (!token) {
+            alert('Bitte zuerst einloggen, um ein Buch anzulegen.');
+            return;
+        }
+
         const raw = this.form.value;
         const ausgewaehlteSchlagwoerter = this.schlagwortKatalog.filter(
             (wort) => raw.schlagwoerter?.[wort],
@@ -252,16 +274,25 @@ export class NeuComponent {
         const datumIso =
             datumStruct != null
                 ? new Date(
-                      datumStruct.year,
-                      datumStruct.month - 1,
-                      datumStruct.day,
-                  )
-                      .toISOString()
-                      .slice(0, 10)
+                      Date.UTC(
+                          datumStruct.year,
+                          datumStruct.month - 1,
+                          datumStruct.day,
+                      ),
+                  ).toISOString()
                 : undefined;
 
+        const isbn = (raw.isbn as string | undefined)?.trim();
+        if (!isbn || !/^\d{3}-\d-\d{3}-\d{5}-\d$/.test(isbn)) {
+            alert(
+                'Bitte eine gültige ISBN-13 im Format 978-x-xxx-xxxxx-x eingeben.',
+            );
+            this.loading = false;
+            return;
+        }
+
         const payload = {
-            isbn: raw.isbn,
+            isbn,
             rating: Number(raw.rating),
             art: raw.art,
             preis: Number(raw.preis),
@@ -276,8 +307,26 @@ export class NeuComponent {
             },
         };
 
-        // Hier würde der Aufruf des Backends erfolgen. Für die Demo nur Log-Ausgabe.
-        console.log('Neues Buch Payload', payload);
-        alert('Buch erfasst (Demo). Details in der Konsole.');
+        this.apollo
+            .mutate({
+                mutation: CREATE_MUTATION,
+                variables: { input: payload },
+                context: {
+                    headers: new HttpHeaders().set(
+                        'Authorization',
+                        `Bearer ${token}`,
+                    ),
+                },
+            })
+            .subscribe({
+                next: () => {
+                    alert('Buch erfolgreich angelegt');
+                    this.form.reset(this.defaultWerte);
+                },
+                error: (err) => {
+                    console.error('Fehler beim Anlegen', err);
+                    alert('Anlegen fehlgeschlagen');
+                },
+            });
     }
 }
