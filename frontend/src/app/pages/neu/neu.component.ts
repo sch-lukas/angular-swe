@@ -37,6 +37,15 @@ const CREATE_MUTATION = gql`
                                 type="text"
                                 formControlName="titel"
                             />
+                            <div
+                                class="text-danger small mt-1"
+                                *ngIf="
+                                    form.get('titel')?.touched &&
+                                    form.get('titel')?.hasError('required')
+                                "
+                            >
+                                Titel darf nicht leer sein.
+                            </div>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Untertitel</label>
@@ -45,6 +54,15 @@ const CREATE_MUTATION = gql`
                                 type="text"
                                 formControlName="untertitel"
                             />
+                            <div
+                                class="text-danger small mt-1"
+                                *ngIf="
+                                    form.get('untertitel')?.touched &&
+                                    form.get('untertitel')?.hasError('required')
+                                "
+                            >
+                                Untertitel darf nicht leer sein.
+                            </div>
                         </div>
 
                         <div class="col-md-6">
@@ -54,6 +72,16 @@ const CREATE_MUTATION = gql`
                                 type="text"
                                 formControlName="isbn"
                             />
+                            <div
+                                class="text-danger small mt-1"
+                                *ngIf="
+                                    form.get('isbn')?.touched &&
+                                    form.get('isbn')?.errors
+                                "
+                            >
+                                Format: 978-0-xxx-xxxxx-x (Bindestriche an den
+                                Stellen lassen, 13 Ziffern).
+                            </div>
                         </div>
 
                         <div class="col-md-6">
@@ -162,6 +190,15 @@ const CREATE_MUTATION = gql`
                                 type="url"
                                 formControlName="homepage"
                             />
+                            <div
+                                class="text-danger small mt-1"
+                                *ngIf="
+                                    form.get('homepage')?.touched &&
+                                    form.get('homepage')?.hasError('required')
+                                "
+                            >
+                                Homepage darf nicht leer sein.
+                            </div>
                         </div>
 
                         <div class="col-12">
@@ -240,15 +277,18 @@ export class NeuComponent {
     ) {
         this.form = this.fb.group({
             titel: [this.defaultWerte.titel, Validators.required],
-            untertitel: [this.defaultWerte.untertitel],
-            isbn: [this.defaultWerte.isbn, Validators.required],
+            untertitel: [this.defaultWerte.untertitel, Validators.required],
+            isbn: [
+                this.defaultWerte.isbn,
+                [Validators.required, Validators.pattern(/^\d{3}-\d-\d{3}-\d{5}-\d$/)],
+            ],
             rating: [this.defaultWerte.rating, Validators.required],
             art: [this.defaultWerte.art, Validators.required],
             preis: [this.defaultWerte.preis, Validators.required],
             rabatt: [this.defaultWerte.rabatt, Validators.required],
             lieferbar: [this.defaultWerte.lieferbar],
             datum: [this.defaultWerte.datum],
-            homepage: [this.defaultWerte.homepage],
+            homepage: [this.defaultWerte.homepage, Validators.required],
             schlagwoerter: this.fb.group(this.defaultWerte.schlagwoerter),
         });
     }
