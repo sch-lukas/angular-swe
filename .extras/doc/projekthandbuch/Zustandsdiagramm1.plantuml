@@ -1,4 +1,4 @@
-@startuml
+@startuml NeuAnlegenZustandsdiagramm
 [*] --> FormularAnzeige
 
 FormularAnzeige : Formular anzeigen

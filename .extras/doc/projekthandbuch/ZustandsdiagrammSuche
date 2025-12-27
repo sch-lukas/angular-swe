@@ -1,0 +1,22 @@
+@startuml SucheZustandsdiagramm
+title Zustandsdiagramm – Buchsuche
+
+[*] --> FormularAnzeige
+
+FormularAnzeige : Suchformular anzeigen
+FormularAnzeige --> SucheStart : Suchen / Init
+
+SucheStart : Suche starten
+SucheStart --> AnfrageSenden
+
+AnfrageSenden : GraphQL-Suchanfrage
+AnfrageSenden --> Ergebnisse : erfolgreich
+AnfrageSenden --> Fehler : Fehler
+
+Ergebnisse : Ergebnisse anzeigen
+Ergebnisse --> FormularAnzeige
+
+Fehler : Fehlermeldung anzeigen
+Fehler --> FormularAnzeige
+
+@enduml
