@@ -1,0 +1,29 @@
+@startuml NeuAnlegenZustandsdiagramm
+[*] --> FormularAnzeige
+
+FormularAnzeige : Formular anzeigen
+FormularAnzeige --> Validierung : Submit
+
+Validierung : Eingaben prüfen
+Validierung --> FormularAnzeige : ungültig
+
+Validierung --> AuthPruefung : gültig
+
+AuthPruefung : Benutzer authentifiziert?
+AuthPruefung --> FehlerNichtAuth : nein
+AuthPruefung --> MutationSenden : ja
+
+FehlerNichtAuth : Fehlermeldung\n"Bitte einloggen"
+FehlerNichtAuth --> FormularAnzeige
+
+MutationSenden : GraphQL Create Mutation
+MutationSenden --> Erfolg : erfolgreich
+MutationSenden --> FehlerServer : Fehler
+
+Erfolg : Buch angelegt\nFormular zurücksetzen
+Erfolg --> FormularAnzeige
+
+FehlerServer : Fehlermeldung\n"Anlegen fehlgeschlagen"
+FehlerServer --> FormularAnzeige
+
+@enduml

@@ -21,7 +21,7 @@ import { KeycloakService } from '../../core/keycloak.service';
             </div>
 
             <div
-                *ngIf="!auth.isAuthenticated(); else logged"
+                *ngIf="!(authState$ | async); else logged"
                 class="d-flex align-items-center"
             >
                 <input
@@ -66,10 +66,13 @@ export class HeaderComponent {
     user = '';
     pass = '';
     loading = false;
+    authState$;
     constructor(
         public auth: KeycloakService,
         private router: Router,
-    ) {}
+    ) {
+        this.authState$ = this.auth.authState$;
+    }
 
     navigateToSuche() {
         this.router.navigate(['/suche']);
