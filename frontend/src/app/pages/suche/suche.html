@@ -53,7 +53,7 @@
       </thead>
       <tbody>
         <tr *ngFor="let b of buecher">
-          <td><strong>{{ b.titel }}</strong></td>
+          <td><strong>{{ b.titel?.titel }}</strong></td>
           <td><code>{{ b.isbn }}</code></td>
           <td>
             <button class="btn btn-sm btn-outline-info">Details</button>
