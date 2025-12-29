@@ -1,13 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { NgbDropdownModule, NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import {
+    NgbDropdownModule,
+    NgbModal,
+    NgbModalModule,
+} from '@ng-bootstrap/ng-bootstrap';
 import { BuchService } from '../../core/buch.service';
 
 @Component({
     selector: 'app-suche',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, NgbDropdownModule, NgbModalModule],
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        NgbDropdownModule,
+        NgbModalModule,
+    ],
     templateUrl: './suche.html',
     styleUrl: './suche.css',
 })
@@ -69,7 +78,12 @@ export class Suche implements OnInit {
         this.buchService.getById(Number(id)).subscribe({
             next: (full) => {
                 // Konvertiere ggf. Timestamp-String in Number, damit die date-Pipe funktioniert
-                if (full && full.datum && typeof full.datum === 'string' && /^[0-9]+$/.test(full.datum)) {
+                if (
+                    full &&
+                    full.datum &&
+                    typeof full.datum === 'string' &&
+                    /^[0-9]+$/.test(full.datum)
+                ) {
                     try {
                         full.datum = Number(full.datum);
                     } catch {

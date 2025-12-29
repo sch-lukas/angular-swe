@@ -62,16 +62,20 @@ export class BuchService {
         if (isbn) suchparameter.isbn = isbn;
         const schlagwoerter = filter?.schlagwoerter?.toString().trim();
         if (schlagwoerter) suchparameter.schlagwoerter = schlagwoerter;
-        if (filter && filter.art && filter.art !== 'ALLE') suchparameter.art = filter.art;
+        if (filter && filter.art && filter.art !== 'ALLE')
+            suchparameter.art = filter.art;
         if (filter && filter.rating) suchparameter.rating = filter.rating;
         if (filter && filter.preis_filter && filter.preis_filter !== 'alle') {
             if (filter.preis_filter === 'unter20') suchparameter.preisMax = 20;
             if (filter.preis_filter === 'ueber20') suchparameter.preisMin = 20;
         }
-        if (filter && typeof filter.lieferbar === 'boolean') suchparameter.lieferbar = filter.lieferbar;
+        if (filter && typeof filter.lieferbar === 'boolean')
+            suchparameter.lieferbar = filter.lieferbar;
         if (filter && filter.rabatt) suchparameter.rabatt = true;
 
-        const variables: any = Object.keys(suchparameter).length ? { suchparameter } : {};
+        const variables: any = Object.keys(suchparameter).length
+            ? { suchparameter }
+            : {};
 
         return this.apollo
             .watchQuery<any>({
@@ -83,7 +87,10 @@ export class BuchService {
                 // 4. Mappen: Antwort sicher verarbeiten — falls `data` fehlt, leere Liste zurückgeben
                 map((result: any) => {
                     if (result.errors) {
-                        console.error('GraphQL-Fehler bei Buch-Suche', result.errors);
+                        console.error(
+                            'GraphQL-Fehler bei Buch-Suche',
+                            result.errors,
+                        );
                     }
                     return result?.data?.buecher ?? [];
                 }),
@@ -103,7 +110,10 @@ export class BuchService {
             .pipe(
                 map((result: any) => {
                     if (result.errors) {
-                        console.error('GraphQL-Fehler beim Laden des Buchs', result.errors);
+                        console.error(
+                            'GraphQL-Fehler beim Laden des Buchs',
+                            result.errors,
+                        );
                     }
                     return result?.data?.buch ?? null;
                 }),
