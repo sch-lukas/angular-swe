@@ -6,7 +6,7 @@
     <div class="card-body">
       <form [formGroup]="suchFormular" (ngSubmit)="suchen()">
         <div class="row g-3">
-          <div class="col-md-4">
+          <div class="col-md-6">
             <label class="form-label">Titel</label>
             <input
               type="text"
@@ -15,7 +15,7 @@
               placeholder="Nach Titel suchen..."
             />
           </div>
-          <div class="col-md-4">
+          <div class="col-md-6">
             <label class="form-label">ISBN</label>
             <input
               type="text"
@@ -24,10 +24,71 @@
               placeholder="ISBN-Nummer..."
             />
           </div>
-          <div class="col-md-4 d-flex align-items-end">
+          <div class="col-md-6">
+            <label class="form-label">Schlagwörter</label>
+            <input
+              type="text"
+              formControlName="schlagwoerter"
+              class="form-control"
+              placeholder="Schlagwörter..."
+            />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Art</label>
+            <div ngbDropdown class="d-inline-block">
+              <button class="btn btn-outline-secondary" id="dropdownArt" ngbDropdownToggle>
+                {{ suchFormular.get('art')?.value || 'ALLE' }}
+              </button>
+              <div ngbDropdownMenu aria-labelledby="dropdownArt">
+                <button ngbDropdownItem (click)="suchFormular.get('art')?.setValue('ALLE')">ALLE</button>
+                <button ngbDropdownItem (click)="suchFormular.get('art')?.setValue('HARDCOVER')">HARDCOVER</button>
+                <button ngbDropdownItem (click)="suchFormular.get('art')?.setValue('PAPERBACK')">PAPERBACK</button>
+                <button ngbDropdownItem (click)="suchFormular.get('art')?.setValue('EBOOK')">EBOOK</button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Rating</label>
+            <div class="d-flex">
+              <div class="form-check me-3" *ngFor="let r of [1,2,3,4,5]">
+                <input class="form-check-input" type="radio" [value]="r" formControlName="rating" id="rating{{r}}">
+                <label class="form-check-label" [for]="'rating' + r">
+                  {{ r }} <span *ngIf="r === 1">Stern</span><span *ngIf="r > 1">Sterne</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Preis</label>
+            <div class="d-flex">
+              <div class="form-check me-3">
+                <input class="form-check-input" type="radio" value="alle" formControlName="preis_filter" id="preisAlle">
+                <label class="form-check-label" for="preisAlle">Alle</label>
+              </div>
+              <div class="form-check me-3">
+                <input class="form-check-input" type="radio" value="unter20" formControlName="preis_filter" id="preisUnter20">
+                <label class="form-check-label" for="preisUnter20">Unter 20€</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" value="ueber20" formControlName="preis_filter" id="preisUeber20">
+                <label class="form-check-label" for="preisUeber20">Über 20€</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" formControlName="lieferbar" id="lieferbar">
+              <label class="form-check-label" for="lieferbar">Nur lieferbare Bücher</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" formControlName="rabatt" id="rabatt">
+              <label class="form-check-label" for="rabatt">Nur reduzierte Artikel</label>
+            </div>
+          </div>
+          <div class="col-12 d-flex justify-content-end">
             <button
               type="submit"
-              class="btn btn-primary w-100"
+              class="btn btn-primary"
               [disabled]="laden"
             >
               <span
@@ -47,18 +108,26 @@
       <thead class="table-dark">
         <tr>
           <th>Titel</th>
-          <th>ISBN</th>
           <th>Preis</th>
+          <th>Rating</th>
+          <th>Lieferbar</th>
           <th>Aktionen</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let b of buecher">
           <td><strong>{{ b.titel?.titel }}</strong></td>
-          <td><code>{{ b.isbn }}</code></td>
           <td>{{ b.preis | currency:'EUR':'symbol':'1.2-2' }}</td>
           <td>
-            <button class="btn btn-sm btn-outline-info">Details</button>
+            <span *ngFor="let star of [].constructor(b.rating || 0)">⭐</span>
+          </td>
+          <td>
+            <span [class]="b.lieferbar ? 'text-success' : 'text-danger'">
+              {{ b.lieferbar ? 'Ja' : 'Nein' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-outline-info" (click)="detailsAnzeigen(b)">Details</button>
           </td>
         </tr>
       </tbody>
@@ -69,3 +138,32 @@
     <div *ngIf="!laden" class="alert alert-info">Keine Bücher gefunden.</div>
   </ng-template>
 </div>
+
+<ng-template #detailModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Buch-Details</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body" *ngIf="selectedBuch">
+    <h5>Stammdaten</h5>
+    <p><strong>ISBN:</strong> {{ selectedBuch.isbn }}</p>
+    <p><strong>Titel:</strong> {{ selectedBuch.titel?.titel }}</p>
+    <p><strong>Preis:</strong> {{ selectedBuch.preis | currency:'EUR':'symbol':'1.2-2' }}</p>
+    <p><strong>Rating:</strong> {{ selectedBuch.rating }} Sterne</p>
+    <p><strong>Lieferbar:</strong> {{ selectedBuch.lieferbar ? 'Ja' : 'Nein' }}</p>
+
+    <h5 class="mt-3">Weitere Details</h5>
+    <p *ngIf="selectedBuch.homepage"><strong>Homepage:</strong>
+      <a [href]="selectedBuch.homepage" target="_blank">{{ selectedBuch.homepage }}</a>
+    </p>
+    <p *ngIf="selectedBuch.rabatt !== undefined"><strong>Rabatt:</strong> {{ formatRabatt(selectedBuch.rabatt) }}</p>
+    <p *ngIf="selectedBuch.schlagwoerter && selectedBuch.schlagwoerter.length">
+      <strong>Tags:</strong>
+      <span class="badge bg-secondary me-1" *ngFor="let tag of selectedBuch.schlagwoerter">{{ tag }}</span>
+    </p>
+    <p *ngIf="selectedBuch.datum"><strong>Datum:</strong> {{ selectedBuch.datum | date:'medium' }}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Schließen</button>
+  </div>
+</ng-template>

@@ -11,11 +11,33 @@ const BUCH_SUCHE_QUERY = gql`
     query Suche($suchparameter: SuchparameterInput) {
         buecher(suchparameter: $suchparameter) {
             id
+            isbn
             titel {
                 titel
             }
             preis
+            rating
             lieferbar
+        }
+    }
+`;
+
+const BUCH_BY_ID_QUERY = gql`
+    query Buch($id: ID!) {
+        buch(id: $id) {
+            id
+            isbn
+            titel {
+                titel
+            }
+            preis
+            rating
+            art
+            lieferbar
+            rabatt
+            schlagwoerter
+            homepage
+            datum
         }
     }
 `;
@@ -38,8 +60,16 @@ export class BuchService {
         if (titel) suchparameter.titel = titel;
         const isbn = filter?.isbn?.toString().trim();
         if (isbn) suchparameter.isbn = isbn;
+        const schlagwoerter = filter?.schlagwoerter?.toString().trim();
+        if (schlagwoerter) suchparameter.schlagwoerter = schlagwoerter;
         if (filter && filter.art && filter.art !== 'ALLE') suchparameter.art = filter.art;
+        if (filter && filter.rating) suchparameter.rating = filter.rating;
+        if (filter && filter.preis_filter && filter.preis_filter !== 'alle') {
+            if (filter.preis_filter === 'unter20') suchparameter.preisMax = 20;
+            if (filter.preis_filter === 'ueber20') suchparameter.preisMin = 20;
+        }
         if (filter && typeof filter.lieferbar === 'boolean') suchparameter.lieferbar = filter.lieferbar;
+        if (filter && filter.rabatt) suchparameter.rabatt = true;
 
         const variables: any = Object.keys(suchparameter).length ? { suchparameter } : {};
 
@@ -56,6 +86,26 @@ export class BuchService {
                         console.error('GraphQL-Fehler bei Buch-Suche', result.errors);
                     }
                     return result?.data?.buecher ?? [];
+                }),
+            );
+    }
+
+    /**
+     * Lädt ein Buch per ID (für Detailanzeige).
+     */
+    getById(id: number): Observable<any> {
+        return this.apollo
+            .query<any>({
+                query: BUCH_BY_ID_QUERY,
+                variables: { id: id.toString() },
+                fetchPolicy: 'network-only',
+            })
+            .pipe(
+                map((result: any) => {
+                    if (result.errors) {
+                        console.error('GraphQL-Fehler beim Laden des Buchs', result.errors);
+                    }
+                    return result?.data?.buch ?? null;
                 }),
             );
     }
