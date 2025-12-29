@@ -48,6 +48,7 @@
         <tr>
           <th>Titel</th>
           <th>ISBN</th>
+          <th>Preis</th>
           <th>Aktionen</th>
         </tr>
       </thead>
@@ -55,6 +56,7 @@
         <tr *ngFor="let b of buecher">
           <td><strong>{{ b.titel?.titel }}</strong></td>
           <td><code>{{ b.isbn }}</code></td>
+          <td>{{ b.preis | currency:'EUR':'symbol':'1.2-2' }}</td>
           <td>
             <button class="btn btn-sm btn-outline-info">Details</button>
           </td>
