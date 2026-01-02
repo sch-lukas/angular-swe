@@ -225,6 +225,7 @@
       <strong>Preis:</strong> {{ selectedBuch.preis |
       currency:'EUR':'symbol':'1.2-2' }}
     </p>
+    <p *ngIf="selectedBuch.art"><strong>Art:</strong> {{ selectedBuch.art }}</p>
     <p><strong>Rating:</strong> {{ selectedBuch.rating }} Sterne</p>
     <p>
       <strong>Lieferbar:</strong> {{ selectedBuch.lieferbar ? 'Ja' : 'Nein' }}
@@ -244,7 +245,7 @@
       <strong>Tags:</strong>
       <span
         class="badge bg-secondary me-1"
-        *ngFor="let tag of selectedBuch.schlagwoerter"
+        *ngFor="let tag of (selectedBuch.schlagwoerter || selectedBuch.tags || [])"
         >{{ tag }}</span
       >
     </p>

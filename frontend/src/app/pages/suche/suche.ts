@@ -77,7 +77,13 @@ export class Suche implements OnInit {
         const id = buch?.id ?? buch?.isbn ?? null;
         if (!id) {
             this.selectedBuch = buch;
-            this.modalService.open(this.detailModal);
+            try {
+                this.cdr.detectChanges();
+            } catch {}
+            this.modalService.open(this.detailModal, {
+                windowClass: 'show',
+                backdropClass: 'show',
+            });
             return;
         }
 
@@ -97,13 +103,25 @@ export class Suche implements OnInit {
                     }
                 }
                 this.selectedBuch = full ?? buch;
-                this.modalService.open(this.detailModal);
+                try {
+                    this.cdr.detectChanges();
+                } catch {}
+                this.modalService.open(this.detailModal, {
+                    windowClass: 'show',
+                    backdropClass: 'show',
+                });
             },
             error: (err) => {
                 console.error('Fehler beim Laden der Buch-Details', err);
                 // Fallback: vorhandene Daten anzeigen
                 this.selectedBuch = buch;
-                this.modalService.open(this.detailModal);
+                try {
+                    this.cdr.detectChanges();
+                } catch {}
+                this.modalService.open(this.detailModal, {
+                    windowClass: 'show',
+                    backdropClass: 'show',
+                });
             },
         });
     }
