@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
     NgbDropdownModule,
@@ -32,6 +32,7 @@ export class Suche implements OnInit {
         private fb: FormBuilder,
         private buchService: BuchService,
         private modalService: NgbModal,
+        private cdr: ChangeDetectorRef,
     ) {
         this.suchFormular = this.fb.group({
             titel: [''],
@@ -58,6 +59,11 @@ export class Suche implements OnInit {
             next: (daten) => {
                 this.buecher = daten;
                 this.laden = false;
+                try {
+                    this.cdr.detectChanges();
+                } catch {
+                    // ignore
+                }
             },
             error: (err) => {
                 console.error('Fehler bei der GraphQL-Suche', err);

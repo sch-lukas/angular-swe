@@ -86,13 +86,19 @@ export class BuchService {
             .valueChanges.pipe(
                 // 4. Mappen: Antwort sicher verarbeiten — falls `data` fehlt, leere Liste zurückgeben
                 map((result: any) => {
+                    // Debug: Ausgabe des rohen Resultats um zu prüfen,
+                    // ob `data.buecher` als Array oder als Slice-Objekt (mit `content`) kommt.
                     if (result.errors) {
                         console.error(
                             'GraphQL-Fehler bei Buch-Suche',
                             result.errors,
                         );
                     }
-                    return result?.data?.buecher ?? [];
+                    const buecher = result?.data?.buecher;
+                    if (Array.isArray(buecher)) return buecher;
+                    if (buecher && Array.isArray(buecher.content))
+                        return buecher.content;
+                    return [];
                 }),
             );
     }
