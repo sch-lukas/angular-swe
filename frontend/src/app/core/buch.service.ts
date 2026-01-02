@@ -16,6 +16,7 @@ const BUCH_SUCHE_QUERY = gql`
                 titel
             }
             preis
+            rabatt
             rating
             lieferbar
         }
@@ -70,7 +71,8 @@ export class BuchService {
             if (filter.preis_filter === 'ueber20') suchparameter.preisMin = 20;
         }
         if (filter && filter.lieferbar === true) suchparameter.lieferbar = true;
-        if (filter && filter.rabatt) suchparameter.rabatt = true;
+        // `rabatt` wird nur client-seitig gefiltert, damit kein Typkonflikt
+        // mit dem Backend-GraphQL-Schema (Backend erwartet eine Zahl) entsteht.
 
         const variables: any = Object.keys(suchparameter).length
             ? { suchparameter }
@@ -93,11 +95,27 @@ export class BuchService {
                             result.errors,
                         );
                     }
-                    const buecher = result?.data?.buecher;
-                    if (Array.isArray(buecher)) return buecher;
-                    if (buecher && Array.isArray(buecher.content))
-                        return buecher.content;
-                    return [];
+                    const buecherRaw = result?.data?.buecher;
+                    let buecher: any[] = [];
+                    if (Array.isArray(buecherRaw)) buecher = buecherRaw;
+                    else if (buecherRaw && Array.isArray(buecherRaw.content))
+                        buecher = buecherRaw.content;
+
+                    // Client-seitiges Filtern für `rabatt`, falls Checkbox aktiviert.
+                    if (filter && filter.rabatt) {
+                        const toFraction = (v: any): number => {
+                            if (v == null) return 0;
+                            const n = Number(String(v).replace('%', '').trim());
+                            if (Number.isNaN(n)) return 0;
+                            return n <= 1 ? n : n / 100;
+                        };
+
+                        buecher = buecher.filter(
+                            (b) => toFraction(b?.rabatt ?? b?.rabatt_raw ?? b?.discount) > 0,
+                        );
+                    }
+
+                    return buecher;
                 }),
             );
     }
