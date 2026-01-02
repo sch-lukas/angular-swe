@@ -69,8 +69,7 @@ export class BuchService {
             if (filter.preis_filter === 'unter20') suchparameter.preisMax = 20;
             if (filter.preis_filter === 'ueber20') suchparameter.preisMin = 20;
         }
-        if (filter && typeof filter.lieferbar === 'boolean')
-            suchparameter.lieferbar = filter.lieferbar;
+        if (filter && filter.lieferbar === true) suchparameter.lieferbar = true;
         if (filter && filter.rabatt) suchparameter.rabatt = true;
 
         const variables: any = Object.keys(suchparameter).length
