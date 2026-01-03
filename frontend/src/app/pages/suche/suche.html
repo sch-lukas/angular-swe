@@ -45,6 +45,14 @@
                 </button>
                 <button
                   ngbDropdownItem
+                  type="button"
+                  (click)="suchFormular.get('art')?.setValue('HARDCOVER')"
+                >
+                  HARDCOVER
+                </button>
+                <button
+                  ngbDropdownItem
+                  type="button"
                   (click)="suchFormular.get('art')?.setValue('PAPERBACK')"
                 >
                   PAPERBACK
