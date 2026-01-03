@@ -61,8 +61,6 @@ export class BuchService {
         if (titel) suchparameter.titel = titel;
         const isbn = filter?.isbn?.toString().trim();
         if (isbn) suchparameter.isbn = isbn;
-        const schlagwoerter = filter?.schlagwoerter?.toString().trim();
-        if (schlagwoerter) suchparameter.schlagwoerter = schlagwoerter;
         if (filter && filter.art && filter.art !== 'ALLE')
             suchparameter.art = filter.art;
         if (filter && filter.rating) suchparameter.rating = filter.rating;

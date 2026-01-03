@@ -25,15 +25,6 @@
             />
           </div>
           <div class="col-12 col-md-6 col-xl-4">
-            <label class="form-label">Schlagwörter</label>
-            <input
-              type="text"
-              formControlName="schlagwoerter"
-              class="form-control"
-              placeholder="Schlagwörter..."
-            />
-          </div>
-          <div class="col-12 col-md-6 col-xl-4">
             <label class="form-label">Art</label>
             <div class="btn-group ms-1" ngbDropdown container="body">
               <button
@@ -54,14 +45,6 @@
                 </button>
                 <button
                   ngbDropdownItem
-                  type="button"
-                  (click)="suchFormular.get('art')?.setValue('HARDCOVER')"
-                >
-                  HARDCOVER
-                </button>
-                <button
-                  ngbDropdownItem
-                  type="button"
                   (click)="suchFormular.get('art')?.setValue('PAPERBACK')"
                 >
                   PAPERBACK

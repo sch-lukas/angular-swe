@@ -43,7 +43,6 @@ export class Suche implements OnInit {
         this.suchFormular = this.fb.group({
             titel: [''],
             isbn: [''],
-            schlagwoerter: [''],
             art: ['ALLE'],
             rating: [null],
             lieferbar: [null],
