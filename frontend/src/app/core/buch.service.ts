@@ -106,13 +106,16 @@ export class BuchService {
                         const hasDiscount = (v: any): boolean => {
                             if (v == null) return false;
                             const s = String(v).trim();
-                            if (s.endsWith('%')) return parseFloat(s.replace('%', '')) > 0;
+                            if (s.endsWith('%'))
+                                return parseFloat(s.replace('%', '')) > 0;
                             const n = Number(s);
                             return !Number.isNaN(n) && n > 0;
                         };
 
                         buecher = buecher.filter((b) =>
-                            hasDiscount(b?.rabatt ?? b?.rabatt_raw ?? b?.discount),
+                            hasDiscount(
+                                b?.rabatt ?? b?.rabatt_raw ?? b?.discount,
+                            ),
                         );
                     }
 
