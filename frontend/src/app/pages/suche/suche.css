@@ -5,6 +5,10 @@
   margin-right: auto;
 }
 
+.suche-form-card label + .btn-group {
+  margin-left: 0.5rem;
+}
+
 .suche-form-card .form-label {
   font-size: 0.9rem;
   font-weight: 600;
