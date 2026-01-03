@@ -66,13 +66,7 @@ export class BuchService {
         if (filter && filter.art && filter.art !== 'ALLE')
             suchparameter.art = filter.art;
         if (filter && filter.rating) suchparameter.rating = filter.rating;
-        if (filter && filter.preis_filter && filter.preis_filter !== 'alle') {
-            if (filter.preis_filter === 'unter20') suchparameter.preisMax = 20;
-            if (filter.preis_filter === 'ueber20') suchparameter.preisMin = 20;
-        }
         if (filter && filter.lieferbar === true) suchparameter.lieferbar = true;
-        // `rabatt` wird nur client-seitig gefiltert, damit kein Typkonflikt
-        // mit dem Backend-GraphQL-Schema (Backend erwartet eine Zahl) entsteht.
 
         const variables: any = Object.keys(suchparameter).length
             ? { suchparameter }
@@ -100,23 +94,6 @@ export class BuchService {
                     if (Array.isArray(buecherRaw)) buecher = buecherRaw;
                     else if (buecherRaw && Array.isArray(buecherRaw.content))
                         buecher = buecherRaw.content;
-
-                    // Client-seitiges Filtern für `rabatt`, falls Checkbox aktiviert.
-                    if (filter && filter.rabatt) {
-                        const toFraction = (v: any): number => {
-                            if (v == null) return 0;
-                            const n = Number(String(v).replace('%', '').trim());
-                            if (Number.isNaN(n)) return 0;
-                            return n <= 1 ? n : n / 100;
-                        };
-
-                        buecher = buecher.filter(
-                            (b) =>
-                                toFraction(
-                                    b?.rabatt ?? b?.rabatt_raw ?? b?.discount,
-                                ) > 0,
-                        );
-                    }
 
                     return buecher;
                 }),

@@ -46,9 +46,7 @@ export class Suche implements OnInit {
             schlagwoerter: [''],
             art: ['ALLE'],
             rating: [null],
-            preis_filter: ['alle'],
             lieferbar: [null],
-            rabatt: [false],
         });
     }
 
@@ -84,6 +82,10 @@ export class Suche implements OnInit {
     onPageChange(page: number): void {
         this.page = page;
         this.aktualisierePagination();
+    }
+
+    resetRating(): void {
+        this.suchFormular.get('rating')?.setValue(null);
     }
 
     private aktualisierePagination(): void {

@@ -2,11 +2,11 @@
   <h2>Buchsuche</h2>
   <hr />
 
-  <div class="card bg-light mb-4">
+  <div class="card bg-light mb-4 suche-form-card">
     <div class="card-body">
       <form [formGroup]="suchFormular" (ngSubmit)="suchen()">
         <div class="row g-3">
-          <div class="col-md-6">
+          <div class="col-12 col-md-6 col-xl-4">
             <label class="form-label">Titel</label>
             <input
               type="text"
@@ -15,7 +15,7 @@
               placeholder="Nach Titel suchen..."
             />
           </div>
-          <div class="col-md-6">
+          <div class="col-12 col-md-6 col-xl-4">
             <label class="form-label">ISBN</label>
             <input
               type="text"
@@ -24,7 +24,7 @@
               placeholder="ISBN-Nummer..."
             />
           </div>
-          <div class="col-md-6">
+          <div class="col-12 col-md-6 col-xl-4">
             <label class="form-label">Schlagwörter</label>
             <input
               type="text"
@@ -33,7 +33,7 @@
               placeholder="Schlagwörter..."
             />
           </div>
-          <div class="col-md-6">
+          <div class="col-12 col-md-6 col-xl-4">
             <label class="form-label">Art</label>
             <div class="btn-group" ngbDropdown container="body">
               <button
@@ -76,9 +76,21 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-12 col-xl-8">
             <label class="form-label">Rating</label>
             <div class="d-flex">
+              <div class="form-check me-3">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  value=""
+                  formControlName="rating"
+                  id="ratingAlle"
+                  (click)="resetRating()"
+                  [checked]="suchFormular.get('rating')?.value == null"
+                />
+                <label class="form-check-label" for="ratingAlle"> Alle </label>
+              </div>
               <div class="form-check me-3" *ngFor="let r of [1,2,3,4,5]">
                 <input
                   class="form-check-input"
@@ -94,47 +106,8 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <label class="form-label">Preis</label>
-            <div class="d-flex">
-              <div class="form-check me-3">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  value="alle"
-                  formControlName="preis_filter"
-                  id="preisAlle"
-                />
-                <label class="form-check-label" for="preisAlle">Alle</label>
-              </div>
-              <div class="form-check me-3">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  value="unter20"
-                  formControlName="preis_filter"
-                  id="preisUnter20"
-                />
-                <label class="form-check-label" for="preisUnter20"
-                  >Unter 20€</label
-                >
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  value="ueber20"
-                  formControlName="preis_filter"
-                  id="preisUeber20"
-                />
-                <label class="form-check-label" for="preisUeber20"
-                  >Über 20€</label
-                >
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="form-check">
+          <div class="col-12 col-sm-6 col-xl-4 d-flex align-items-center gap-2">
+            <div class="form-check mb-0">
               <input
                 class="form-check-input"
                 type="checkbox"
@@ -143,17 +116,6 @@
               />
               <label class="form-check-label" for="lieferbar"
                 >Nur lieferbare Bücher</label
-              >
-            </div>
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                formControlName="rabatt"
-                id="rabatt"
-              />
-              <label class="form-check-label" for="rabatt"
-                >Nur reduzierte Artikel</label
               >
             </div>
           </div>

@@ -1,0 +1,11 @@
+/* limit form width for compact layout */
+.suche-form-card {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.suche-form-card .form-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
