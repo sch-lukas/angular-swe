@@ -9,6 +9,9 @@ import {
 } from '@ng-bootstrap/ng-bootstrap';
 import { BuchService } from '../../core/buch.service';
 
+/**
+ * Komponente zur Suche und Anzeige von Büchern mit Filteroptionen und Pagination.
+ */
 @Component({
     selector: 'app-suche',
     standalone: true,
@@ -23,15 +26,27 @@ import { BuchService } from '../../core/buch.service';
     styleUrl: './suche.css',
 })
 export class Suche implements OnInit {
+    // Reaktives Formular für Suchfilter
     suchFormular: FormGroup;
+
+    // Alle gefundenen Bücher
     buecher: any[] = [];
+
+    // Aktuell angezeigte Bücher (paginiert)
     sichtbareBuecher: any[] = [];
+
+    // Ladezustand während der Suche
     laden: boolean = false;
+
+    // Aktuell ausgewähltes Buch für Detailansicht
     selectedBuch: any = null;
+
+    // Pagination-Einstellungen
     page = 1;
     pageSize = 5;
     collectionSize = 0;
 
+    // Referenz auf das Detail-Modal im Template
     @ViewChild('detailModal') detailModal: any;
 
     constructor(
@@ -40,6 +55,7 @@ export class Suche implements OnInit {
         private modalService: NgbModal,
         private cdr: ChangeDetectorRef,
     ) {
+        // Initialisiere Suchformular mit Standardwerten
         this.suchFormular = this.fb.group({
             titel: [''],
             isbn: [''],
@@ -49,10 +65,12 @@ export class Suche implements OnInit {
         });
     }
 
+    /** Führt initiale Suche beim Laden der Komponente aus */
     ngOnInit(): void {
         this.suchen();
     }
 
+    /** Führt die Buchsuche mit aktuellen Filterkriterien aus */
     suchen(): void {
         this.laden = true;
 
@@ -68,7 +86,7 @@ export class Suche implements OnInit {
                 try {
                     this.cdr.detectChanges();
                 } catch {
-                    // ignore
+                    // ChangeDetection-Fehler ignorieren
                 }
             },
             error: (err) => {
@@ -78,15 +96,18 @@ export class Suche implements OnInit {
         });
     }
 
+    /** Wechselt zur angegebenen Seite in der Pagination */
     onPageChange(page: number): void {
         this.page = page;
         this.aktualisierePagination();
     }
 
+    /** Setzt das Rating-Feld auf null zurück */
     resetRating(): void {
         this.suchFormular.get('rating')?.setValue(null);
     }
 
+    /** Berechnet sichtbare Bücher basierend auf aktueller Seite */
     private aktualisierePagination(): void {
         const start = (this.page - 1) * this.pageSize;
         this.sichtbareBuecher = this.buecher.slice(
@@ -95,9 +116,11 @@ export class Suche implements OnInit {
         );
     }
 
+    /** Lädt vollständige Buchdetails und öffnet das Detail-Modal */
     detailsAnzeigen(buch: any): void {
-        // Lade vollständige Details per ID und zeige Modal
         const id = buch?.id ?? buch?.isbn ?? null;
+
+        // Fallback: Zeige vorhandene Daten wenn keine ID verfügbar
         if (!id) {
             this.selectedBuch = buch;
             try {
@@ -110,9 +133,10 @@ export class Suche implements OnInit {
             return;
         }
 
+        // Lade vollständige Buchdetails vom Backend
         this.buchService.getById(Number(id)).subscribe({
             next: (full) => {
-                // Konvertiere ggf. Timestamp-String in Number, damit die date-Pipe funktioniert
+                // Konvertiere Timestamp-String für date-Pipe Kompatibilität
                 if (
                     full &&
                     full.datum &&
@@ -122,7 +146,7 @@ export class Suche implements OnInit {
                     try {
                         full.datum = Number(full.datum);
                     } catch {
-                        // leave as-is
+                        // Originalwert beibehalten
                     }
                 }
                 this.selectedBuch = full ?? buch;
@@ -136,7 +160,7 @@ export class Suche implements OnInit {
             },
             error: (err) => {
                 console.error('Fehler beim Laden der Buch-Details', err);
-                // Fallback: vorhandene Daten anzeigen
+                // Fallback: Zeige vorhandene Daten bei Fehler
                 this.selectedBuch = buch;
                 try {
                     this.cdr.detectChanges();
@@ -155,7 +179,6 @@ export class Suche implements OnInit {
      */
     formatRabatt(value: any): string {
         if (value === undefined || value === null) return '';
-        // If backend already returns a string containing '%', strip it first
         if (typeof value === 'string' && value.includes('%')) {
             const cleaned = value.replace('%', '').trim();
             const n = Number(cleaned);
