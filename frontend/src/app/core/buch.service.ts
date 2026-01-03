@@ -103,15 +103,16 @@ export class BuchService {
 
                     // Client-seitiges Filtern für `rabatt`, falls Checkbox aktiviert.
                     if (filter && filter.rabatt) {
-                        const toFraction = (v: any): number => {
-                            if (v == null) return 0;
-                            const n = Number(String(v).replace('%', '').trim());
-                            if (Number.isNaN(n)) return 0;
-                            return n <= 1 ? n : n / 100;
+                        const hasDiscount = (v: any): boolean => {
+                            if (v == null) return false;
+                            const s = String(v).trim();
+                            if (s.endsWith('%')) return parseFloat(s.replace('%', '')) > 0;
+                            const n = Number(s);
+                            return !Number.isNaN(n) && n > 0;
                         };
 
-                        buecher = buecher.filter(
-                            (b) => toFraction(b?.rabatt ?? b?.rabatt_raw ?? b?.discount) > 0,
+                        buecher = buecher.filter((b) =>
+                            hasDiscount(b?.rabatt ?? b?.rabatt_raw ?? b?.discount),
                         );
                     }
 
