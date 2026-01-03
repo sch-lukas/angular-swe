@@ -5,6 +5,7 @@ import {
     NgbDropdownModule,
     NgbModal,
     NgbModalModule,
+    NgbPaginationModule,
 } from '@ng-bootstrap/ng-bootstrap';
 import { BuchService } from '../../core/buch.service';
 
@@ -16,6 +17,7 @@ import { BuchService } from '../../core/buch.service';
         ReactiveFormsModule,
         NgbDropdownModule,
         NgbModalModule,
+        NgbPaginationModule,
     ],
     templateUrl: './suche.html',
     styleUrl: './suche.css',
@@ -23,8 +25,12 @@ import { BuchService } from '../../core/buch.service';
 export class Suche implements OnInit {
     suchFormular: FormGroup;
     buecher: any[] = [];
+    sichtbareBuecher: any[] = [];
     laden: boolean = false;
     selectedBuch: any = null;
+    page = 1;
+    pageSize = 5;
+    collectionSize = 0;
 
     @ViewChild('detailModal') detailModal: any;
 
@@ -58,6 +64,9 @@ export class Suche implements OnInit {
         this.buchService.suche(filterWerte).subscribe({
             next: (daten) => {
                 this.buecher = daten;
+                this.collectionSize = daten?.length ?? 0;
+                this.page = 1;
+                this.aktualisierePagination();
                 this.laden = false;
                 try {
                     this.cdr.detectChanges();
@@ -70,6 +79,19 @@ export class Suche implements OnInit {
                 this.laden = false;
             },
         });
+    }
+
+    onPageChange(page: number): void {
+        this.page = page;
+        this.aktualisierePagination();
+    }
+
+    private aktualisierePagination(): void {
+        const start = (this.page - 1) * this.pageSize;
+        this.sichtbareBuecher = this.buecher.slice(
+            start,
+            start + this.pageSize,
+        );
     }
 
     detailsAnzeigen(buch: any): void {

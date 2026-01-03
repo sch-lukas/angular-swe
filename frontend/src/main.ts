@@ -1,4 +1,4 @@
-// import '@angular/localize/init';
+import '@angular/localize/init';
 import { provideHttpClient } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
