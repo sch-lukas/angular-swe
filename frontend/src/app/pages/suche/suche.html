@@ -35,9 +35,10 @@
           </div>
           <div class="col-md-6">
             <label class="form-label">Art</label>
-            <div ngbDropdown class="d-inline-block">
+            <div class="btn-group" ngbDropdown container="body">
               <button
-                class="btn btn-outline-secondary"
+                type="button"
+                class="btn btn-outline-secondary dropdown-toggle"
                 id="dropdownArt"
                 ngbDropdownToggle
               >
@@ -46,27 +47,31 @@
               <div ngbDropdownMenu aria-labelledby="dropdownArt">
                 <button
                   ngbDropdownItem
+                  type="button"
                   (click)="suchFormular.get('art')?.setValue('ALLE')"
                 >
                   ALLE
                 </button>
                 <button
                   ngbDropdownItem
+                  type="button"
                   (click)="suchFormular.get('art')?.setValue('HARDCOVER')"
                 >
                   HARDCOVER
                 </button>
                 <button
                   ngbDropdownItem
+                  type="button"
                   (click)="suchFormular.get('art')?.setValue('PAPERBACK')"
                 >
                   PAPERBACK
                 </button>
                 <button
                   ngbDropdownItem
-                  (click)="suchFormular.get('art')?.setValue('EBOOK')"
+                  type="button"
+                  (click)="suchFormular.get('art')?.setValue('EPUB')"
                 >
-                  EBOOK
+                  EPUB
                 </button>
               </div>
             </div>
