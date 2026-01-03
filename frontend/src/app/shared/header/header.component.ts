@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -7,7 +7,7 @@ import { KeycloakService } from '../../core/keycloak.service';
 @Component({
     selector: 'app-header',
     standalone: true,
-    imports: [CommonModule, FormsModule, RouterModule],
+    imports: [AsyncPipe, FormsModule, RouterModule],
     templateUrl: './header.component.html',
 })
 export class HeaderComponent {

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -16,7 +16,8 @@ import { BuchService } from '../../core/buch.service';
     selector: 'app-suche',
     standalone: true,
     imports: [
-        CommonModule,
+        CurrencyPipe,
+        DatePipe,
         ReactiveFormsModule,
         NgbDropdownModule,
         NgbModalModule,

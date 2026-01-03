@@ -7,38 +7,33 @@
     >
   </div>
 
-  <div
-    *ngIf="!(authState$ | async); else logged"
-    class="d-flex align-items-center"
-  >
-    <input
-      [(ngModel)]="user"
-      placeholder="Benutzer"
-      class="form-control form-control-sm me-2"
-      style="width: 120px"
-    />
-    <input
-      [(ngModel)]="pass"
-      placeholder="Passwort"
-      type="password"
-      class="form-control form-control-sm me-2"
-      style="width: 120px"
-    />
-    <button class="btn btn-primary btn-sm" (click)="login()">Login</button>
-  </div>
-
-  <ng-template #logged>
+  @if (!(authState$ | async)) {
     <div class="d-flex align-items-center">
-      <button
-        *ngIf="auth.isAuthenticated()"
-        class="btn btn-success btn-sm me-2"
-        (click)="navigateToNeu()"
-      >
-        Neu anlegen
-      </button>
+      <input
+        [(ngModel)]="user"
+        placeholder="Benutzer"
+        class="form-control form-control-sm me-2"
+        style="width: 120px"
+      />
+      <input
+        [(ngModel)]="pass"
+        placeholder="Passwort"
+        type="password"
+        class="form-control form-control-sm me-2"
+        style="width: 120px"
+      />
+      <button class="btn btn-primary btn-sm" (click)="login()">Login</button>
+    </div>
+  } @else {
+    <div class="d-flex align-items-center">
+      @if (auth.isAuthenticated()) {
+        <button class="btn btn-success btn-sm me-2" (click)="navigateToNeu()">
+          Neu anlegen
+        </button>
+      }
       <button class="btn btn-outline-secondary btn-sm" (click)="logout()">
         Logout
       </button>
     </div>
-  </ng-template>
+  }
 </div>
