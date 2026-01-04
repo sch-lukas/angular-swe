@@ -1,12 +1,17 @@
-// src/app/core/buch.service.ts
+/**
+ * Service zur Kommunikation mit dem GraphQL-Backend für Buch-Operationen.
+ * Bietet Methoden zur Suche und zum Laden von Buchdetails.
+ */
 
 import { Injectable } from '@angular/core';
 import { Apollo, gql } from 'apollo-angular';
 import { Observable, map } from 'rxjs';
 
 // =================================================================
-// 1. DEFINITION DER GRAPHQL QUERY
+// GraphQL Queries für Buch-Operationen
 // =================================================================
+
+/** Query für die Buchsuche mit optionalen Filterparametern */
 const BUCH_SUCHE_QUERY = gql`
     query Suche($suchparameter: SuchparameterInput) {
         buecher(suchparameter: $suchparameter) {
@@ -23,6 +28,7 @@ const BUCH_SUCHE_QUERY = gql`
     }
 `;
 
+/** Query zum Laden eines einzelnen Buchs mit allen Details */
 const BUCH_BY_ID_QUERY = gql`
     query Buch($id: ID!) {
         buch(id: $id) {
@@ -47,25 +53,37 @@ const BUCH_BY_ID_QUERY = gql`
     providedIn: 'root',
 })
 export class BuchService {
-    // 2. Den Apollo-Client injizieren
+    /** Apollo-Client für GraphQL-Anfragen */
     constructor(private apollo: Apollo) {}
 
     /**
      * Führt eine GraphQL-Suche nach Büchern basierend auf Filterparametern durch.
+     * @param filter Suchkriterien (titel, isbn, art, rating, lieferbar)
+     * @returns Observable mit Array der gefundenen Bücher
      */
     suche(filter: any): Observable<any[]> {
-        // 3. Die Apollo-Query ausführen
-        // Build `suchparameter` only with set values; if empty, send no variable
+        // Nur gesetzte Filterwerte an das Backend senden
         const suchparameter: any = {};
+
         const titel = filter?.titel?.toString().trim();
         if (titel) suchparameter.titel = titel;
+
         const isbn = filter?.isbn?.toString().trim();
         if (isbn) suchparameter.isbn = isbn;
-        if (filter && filter.art && filter.art !== 'ALLE')
-            suchparameter.art = filter.art;
-        if (filter && filter.rating) suchparameter.rating = filter.rating;
-        if (filter && filter.lieferbar === true) suchparameter.lieferbar = true;
 
+        if (filter?.art && filter.art !== 'ALLE') {
+            suchparameter.art = filter.art;
+        }
+
+        if (filter?.rating) {
+            suchparameter.rating = filter.rating;
+        }
+
+        if (filter?.lieferbar === true) {
+            suchparameter.lieferbar = true;
+        }
+
+        // Leere Suchparameter werden nicht mitgesendet
         const variables: any = Object.keys(suchparameter).length
             ? { suchparameter }
             : {};
@@ -77,29 +95,32 @@ export class BuchService {
                 fetchPolicy: 'network-only',
             })
             .valueChanges.pipe(
-                // 4. Mappen: Antwort sicher verarbeiten — falls `data` fehlt, leere Liste zurückgeben
                 map((result: any) => {
-                    // Debug: Ausgabe des rohen Resultats um zu prüfen,
-                    // ob `data.buecher` als Array oder als Slice-Objekt (mit `content`) kommt.
+                    // Fehlerbehandlung
                     if (result.errors) {
                         console.error(
                             'GraphQL-Fehler bei Buch-Suche',
                             result.errors,
                         );
                     }
-                    const buecherRaw = result?.data?.buecher;
-                    let buecher: any[] = [];
-                    if (Array.isArray(buecherRaw)) buecher = buecherRaw;
-                    else if (buecherRaw && Array.isArray(buecherRaw.content))
-                        buecher = buecherRaw.content;
 
-                    return buecher;
+                    // Ergebnis kann Array oder Slice-Objekt (mit content) sein
+                    const buecherRaw = result?.data?.buecher;
+                    if (Array.isArray(buecherRaw)) {
+                        return buecherRaw;
+                    }
+                    if (buecherRaw && Array.isArray(buecherRaw.content)) {
+                        return buecherRaw.content;
+                    }
+                    return [];
                 }),
             );
     }
 
     /**
-     * Lädt ein Buch per ID (für Detailanzeige).
+     * Lädt ein einzelnes Buch anhand seiner ID.
+     * @param id Die Buch-ID
+     * @returns Observable mit den vollständigen Buchdaten oder null
      */
     getById(id: number): Observable<any> {
         return this.apollo
