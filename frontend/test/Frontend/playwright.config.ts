@@ -13,5 +13,6 @@ export default defineConfig({
         headless: true,
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',
+        ignoreHTTPSErrors: true, // Akzeptiere selbstsignierte Zertifikate
     },
 });
