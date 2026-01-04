@@ -1,6 +1,5 @@
 # Frontend – Schnellstart
 
-Kurze Anleitung, damit andere Entwickler:innen das Angular-Frontend zügig lokal starten können.
 
 ```powershell
 PS C:\software-engineering\angular-swe\frontend> pnpm install
@@ -27,6 +26,11 @@ p
   - Direct Access Grants: enabled
 - Token-URL (wird im Frontend genutzt): `https://localhost:8843/realms/nest/protocol/openid-connect/token`
 - Selbstsigniertes Zertifikat im Browser einmal akzeptieren, sonst schlägt der Token-Request mit Status 0 fehl: https://localhost:8843/realms/nest/account
+
+## Playwright Test
+
+cd C:\software-engineering\angular-swe\frontend
+pnpm exec playwright test --config test/Frontend/playwright.config.ts
 
 Erlaubte ISBN
 978-0-306-40615-7
