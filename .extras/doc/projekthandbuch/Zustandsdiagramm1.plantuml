@@ -1,29 +1,38 @@
-@startuml NeuAnlegenZustandsdiagramm
-[*] --> FormularAnzeige
+@startuml CreateBuchClean
+title UML-Zustandsdiagramm – CreateBuch (NeuComponent)
 
-FormularAnzeige : Formular anzeigen
-FormularAnzeige --> Validierung : Submit
+state "index.html" as Index {
 
-Validierung : Eingaben prüfen
-Validierung --> FormularAnzeige : ungültig
+    [*] --> Home
+    Home --> CreateBuch : Menüpunkt\n"Neues Buch"
 
-Validierung --> AuthPruefung : gültig
+    state CreateBuch {
 
-AuthPruefung : Benutzer authentifiziert?
-AuthPruefung --> FehlerNichtAuth : nein
-AuthPruefung --> MutationSenden : ja
+        [*] --> FormularAnzeigen
 
-FehlerNichtAuth : Fehlermeldung\n"Bitte einloggen"
-FehlerNichtAuth --> FormularAnzeige
+        FormularAnzeigen --> Eingabe : Benutzer gibt Daten ein
+    Eingabe --> Validierung : Button "Speichern"
 
-MutationSenden : GraphQL Create Mutation
-MutationSenden --> Erfolg : erfolgreich
-MutationSenden --> FehlerServer : Fehler
+        state Validierung {
+            [*] --> Prüfen
+            Prüfen --> Fehler : Formular ungültig\noder ISBN falsch
+            Prüfen --> Auth : Formular gültig
+        }
 
-Erfolg : Buch angelegt\nFormular zurücksetzen
-Erfolg --> FormularAnzeige
+        Fehler --> Eingabe : Korrektur
 
-FehlerServer : Fehlermeldung\n"Anlegen fehlgeschlagen"
-FehlerServer --> FormularAnzeige
+        Auth --> Fehler : kein Token
+        Auth --> Mutation : Token gültig
+
+        Mutation --> FehlerServer : GraphQL-Fehler
+        Mutation --> Erfolg : Mutation OK
+
+        FehlerServer --> Eingabe
+
+        Erfolg --> FormularAnzeigen : Formular reset()
+    }
+
+    CreateBuch --> Home : Logout
+}
 
 @enduml

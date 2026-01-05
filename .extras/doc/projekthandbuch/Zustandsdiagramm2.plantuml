@@ -1,0 +1,42 @@
+@startuml Suche_PageFlow
+title UML-Zustandsdiagramm – Page Flow "Buchsuche"
+
+state "index.html" as Index {
+
+    [*] --> SucheBuecher
+
+    state SucheBuecher {
+
+        [*] --> Suchformular
+
+        Suchformular : Suchformular anzeigen
+        Suchformular --> SucheLaeuft : Button "Suchen"\noder Init
+
+        SucheLaeuft : Suche läuft (Loading)
+        SucheLaeuft --> Entscheidung : Ergebnis eingetroffen
+
+        state Entscheidung <<choice>>
+
+        Entscheidung --> KeineTreffer : kein Buch gefunden
+        Entscheidung --> Trefferliste : mind. 1 Buch gefunden
+
+        KeineTreffer : Fehlermeldung anzeigen
+        KeineTreffer --> Suchformular
+
+        state Trefferliste {
+
+            [*] --> ErgebnisseAnzeigen
+            ErgebnisseAnzeigen : Trefferliste anzeigen
+
+            ErgebnisseAnzeigen --> Pagination : Seite wechseln
+            Pagination --> ErgebnisseAnzeigen
+
+            ErgebnisseAnzeigen --> Details : Link anklicken
+        }
+
+        Details : Detail-Modal anzeigen
+        Details --> ErgebnisseAnzeigen : Modal schließen
+    }
+}
+
+@enduml
