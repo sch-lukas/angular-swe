@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+﻿import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import {
     FormBuilder,
@@ -23,232 +23,14 @@ const CREATE_MUTATION = gql`
     selector: 'app-neu',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, NgbDatepickerModule],
-    template: `
-        <div class="card">
-            <div class="card-body">
-                <h2 class="h5 mb-4">Neues Buch anlegen</h2>
-
-                <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Titel *</label>
-                            <input
-                                class="form-control"
-                                type="text"
-                                formControlName="titel"
-                            />
-                            <div
-                                class="text-danger small mt-1"
-                                *ngIf="
-                                    form.get('titel')?.touched &&
-                                    form.get('titel')?.hasError('required')
-                                "
-                            >
-                                Titel darf nicht leer sein.
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Untertitel</label>
-                            <input
-                                class="form-control"
-                                type="text"
-                                formControlName="untertitel"
-                            />
-                            <div
-                                class="text-danger small mt-1"
-                                *ngIf="
-                                    form.get('untertitel')?.touched &&
-                                    form.get('untertitel')?.hasError('required')
-                                "
-                            >
-                                Untertitel darf nicht leer sein.
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">ISBN *</label>
-                            <input
-                                class="form-control"
-                                type="text"
-                                formControlName="isbn"
-                            />
-                            <div
-                                class="text-danger small mt-1"
-                                *ngIf="
-                                    form.get('isbn')?.touched &&
-                                    form.get('isbn')?.errors
-                                "
-                            >
-                                Format: 978-0-xxx-xxxxx-x (Bindestriche an den
-                                Stellen lassen, 13 Ziffern).
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">Art *</label>
-                            <select
-                                class="form-select"
-                                formControlName="art"
-                            >
-                                <option
-                                    *ngFor="let option of artOptionen"
-                                    [value]="option"
-                                >
-                                    {{ option }}
-                                </option>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">Rating *</label>
-                            <div class="d-flex flex-wrap gap-2">
-                                <div
-                                    class="form-check form-check-inline"
-                                    *ngFor="let option of ratingOptionen"
-                                >
-                                    <input
-                                        class="form-check-input"
-                                        type="radio"
-                                        [value]="option"
-                                        formControlName="rating"
-                                        id="rating-{{ option }}"
-                                    />
-                                    <label
-                                        class="form-check-label"
-                                        for="rating-{{ option }}"
-                                    >
-                                        {{ option }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">Lieferbar</label>
-                            <div class="form-check">
-                                <input
-                                    class="form-check-input"
-                                    type="checkbox"
-                                    formControlName="lieferbar"
-                                    id="lieferbar"
-                                />
-                                <label class="form-check-label" for="lieferbar">
-                                    Sofort lieferbar
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">Preis (EUR) *</label>
-                            <input
-                                class="form-control"
-                                type="number"
-                                step="0.01"
-                                formControlName="preis"
-                            />
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">Rabatt *</label>
-                            <input
-                                class="form-control"
-                                type="number"
-                                step="0.001"
-                                min="0"
-                                max="1"
-                                formControlName="rabatt"
-                            />
-                            <div class="form-text">
-                                Angabe als Dezimalzahl (z.B. 0.150 = 15%)
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">Erscheinungsdatum</label>
-                            <div class="input-group">
-                                <input
-                                    class="form-control"
-                                    ngbDatepicker
-                                    #dp="ngbDatepicker"
-                                    formControlName="datum"
-                                    placeholder="JJJJ-MM-TT"
-                                />
-                                <button
-                                    class="btn btn-outline-secondary"
-                                    type="button"
-                                    (click)="dp.toggle()"
-                                >
-                                    Kalender
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label">Homepage</label>
-                            <input
-                                class="form-control"
-                                type="url"
-                                formControlName="homepage"
-                            />
-                            <div
-                                class="text-danger small mt-1"
-                                *ngIf="
-                                    form.get('homepage')?.touched &&
-                                    form.get('homepage')?.hasError('required')
-                                "
-                            >
-                                Homepage darf nicht leer sein.
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <label class="form-label">Schlagwörter</label>
-                            <div
-                                class="d-flex flex-wrap gap-3"
-                                formGroupName="schlagwoerter"
-                            >
-                                <div
-                                    class="form-check"
-                                    *ngFor="let wort of schlagwortKatalog"
-                                >
-                                    <input
-                                        class="form-check-input"
-                                        type="checkbox"
-                                        [formControlName]="wort"
-                                        id="schlag-{{ wort }}"
-                                    />
-                                    <label
-                                        class="form-check-label"
-                                        for="schlag-{{ wort }}"
-                                    >
-                                        {{ wort }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 d-flex gap-2">
-                        <button class="btn btn-primary" type="submit">
-                            Speichern
-                        </button>
-                        <button
-                            class="btn btn-outline-secondary"
-                            type="button"
-                            (click)="form.reset(defaultWerte)"
-                        >
-                            Zurücksetzen
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    `,
+    templateUrl: './neu.component.html',
 })
 export class NeuComponent {
+    // Auswahlwerte fuer Dropdowns und Checkboxen
     artOptionen = ['EPUB', 'HARDCOVER', 'PAPERBACK'];
     ratingOptionen = [0, 1, 2, 3, 4, 5];
     schlagwortKatalog = ['JAVASCRIPT', 'TYPESCRIPT', 'JAVA', 'PYTHON'];
+    // Lade-Flag fuer UI
     loading = false;
 
     readonly defaultWerte = {
@@ -275,6 +57,7 @@ export class NeuComponent {
         private apollo: Apollo,
         private keycloak: KeycloakService,
     ) {
+        // Formular mit Validierungen aufbauen
         this.form = this.fb.group({
             titel: [this.defaultWerte.titel, Validators.required],
             untertitel: [this.defaultWerte.untertitel, Validators.required],
@@ -299,6 +82,7 @@ export class NeuComponent {
             return;
         }
 
+        // Token aus Keycloak holen
         const token = this.keycloak.getToken();
         if (!token) {
             alert('Bitte zuerst einloggen, um ein Buch anzulegen.');
@@ -325,12 +109,13 @@ export class NeuComponent {
         const isbn = (raw.isbn as string | undefined)?.trim();
         if (!isbn || !/^\d{3}-\d-\d{3}-\d{5}-\d$/.test(isbn)) {
             alert(
-                'Bitte eine gültige ISBN-13 im Format 978-x-xxx-xxxxx-x eingeben.',
+                'Bitte eine gueltige ISBN-13 im Format 978-x-xxx-xxxxx-x eingeben.',
             );
             this.loading = false;
             return;
         }
 
+        // Payload fuer GraphQL bauen
         const payload = {
             isbn,
             rating: Number(raw.rating),
@@ -370,3 +155,4 @@ export class NeuComponent {
             });
     }
 }
+
