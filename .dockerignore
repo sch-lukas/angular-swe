@@ -6,6 +6,11 @@ coverage
 dist
 log
 node_modules
+**/node_modules
+frontend/node_modules
+frontend/.angular
+frontend/dist
+frontend/test-results
 test
 prisma/schema.prisma
 src/config/resources/tls/private-key.pem

@@ -1,6 +1,5 @@
 # Frontend – Schnellstart
 
-
 ```powershell
 PS C:\software-engineering\angular-swe\frontend> pnpm install
 ```
@@ -26,6 +25,18 @@ p
   - Direct Access Grants: enabled
 - Token-URL (wird im Frontend genutzt): `https://localhost:8843/realms/nest/protocol/openid-connect/token`
 - Selbstsigniertes Zertifikat im Browser einmal akzeptieren, sonst schlägt der Token-Request mit Status 0 fehl: https://localhost:8843/realms/nest/account
+
+## Docker
+
+- Docker Image bauen:
+      cd C:\software-engineering\angular-swe
+      docker build -f frontend/docker/Dockerfile -t angular-frontend .
+- Container starten:
+      docker run -d -p 4200:80 --name frontend angular-frontend
+- Bei Änderungen neu bauen:
+      docker stop frontend && docker rm frontend
+      docker build -f frontend/docker/Dockerfile -t angular-frontend .
+      docker run -d -p 4200:80 --name frontend angular-frontend
 
 ## Playwright Test
 
