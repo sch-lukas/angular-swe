@@ -32,7 +32,18 @@ p
 cd C:\software-engineering\angular-swe\frontend
 pnpm exec playwright test --config test/Frontend/playwright.config.ts
 
+https://test.de/
 Erlaubte ISBN
+978-1-4028-9462-6
+978-0-596-52068-7
+978-1-59327-584-6
+978-1-4919-6418-3
+978-3-86680-192-9
+978-0-201-63361-0
+978-0-321-35668-0
+978-0-13-468599-1
+978-1-59327-950-9
+978-1-4919-1889-4
 978-0-306-40615-7
 978-0-321-14653-3
 978-0-393-04002-9

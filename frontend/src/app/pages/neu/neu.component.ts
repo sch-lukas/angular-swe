@@ -19,6 +19,9 @@ const CREATE_MUTATION = gql`
     }
 `;
 
+// Striktes ISBN-13-Format: 978-x-xxxx-xxxx-x (Bindestriche fix)
+const ISBN_PATTERN = /^\d{3}-\d-\d{4}-\d{4}-\d$/;
+
 @Component({
     selector: 'app-neu',
     standalone: true,
@@ -63,7 +66,7 @@ export class NeuComponent {
             untertitel: [this.defaultWerte.untertitel, Validators.required],
             isbn: [
                 this.defaultWerte.isbn,
-                [Validators.required, Validators.pattern(/^\d{3}-\d-\d{3}-\d{5}-\d$/)],
+                [Validators.required, Validators.pattern(ISBN_PATTERN)],
             ],
             rating: [this.defaultWerte.rating, Validators.required],
             art: [this.defaultWerte.art, Validators.required],
@@ -71,7 +74,14 @@ export class NeuComponent {
             rabatt: [this.defaultWerte.rabatt, Validators.required],
             lieferbar: [this.defaultWerte.lieferbar],
             datum: [this.defaultWerte.datum],
-            homepage: [this.defaultWerte.homepage, Validators.required],
+            homepage: [
+                this.defaultWerte.homepage,
+                [
+                    Validators.required,
+                    // Einfache URL-Pruefung fuer http/https
+                    Validators.pattern(/^https?:\/\/.+/),
+                ],
+            ],
             schlagwoerter: this.fb.group(this.defaultWerte.schlagwoerter),
         });
     }
@@ -107,9 +117,9 @@ export class NeuComponent {
                 : undefined;
 
         const isbn = (raw.isbn as string | undefined)?.trim();
-        if (!isbn || !/^\d{3}-\d-\d{3}-\d{5}-\d$/.test(isbn)) {
+        if (!isbn || !ISBN_PATTERN.test(isbn)) {
             alert(
-                'Bitte eine gueltige ISBN-13 im Format 978-x-xxx-xxxxx-x eingeben.',
+                'Bitte eine gueltige ISBN-13 im Format 978-x-xxxx-xxxx-x eingeben.',
             );
             this.loading = false;
             return;
