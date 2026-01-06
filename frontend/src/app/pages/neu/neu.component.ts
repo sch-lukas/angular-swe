@@ -78,8 +78,8 @@ export class NeuComponent {
                 this.defaultWerte.homepage,
                 [
                     Validators.required,
-                    // Einfache URL-Pruefung fuer http/https
-                    Validators.pattern(/^https?:\/\/.+/),
+                    // URL-Pruefung mit optionalem http/https
+                    Validators.pattern(/^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}([\/?#].*)?$/),
                 ],
             ],
             schlagwoerter: this.fb.group(this.defaultWerte.schlagwoerter),
