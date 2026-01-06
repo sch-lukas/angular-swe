@@ -19,8 +19,8 @@ const CREATE_MUTATION = gql`
     }
 `;
 
-// Striktes ISBN-13-Format: 978-x-xxxx-xxxx-x (Bindestriche fix)
-const ISBN_PATTERN = /^\d{3}-\d-\d{4}-\d{4}-\d$/;
+// ISBN-13: startet mit 978 oder 979, 13 Ziffern, optionale Bindestriche/Leerzeichen
+const ISBN_PATTERN = /^(?:97[89])(?:[- ]?\d){10}$/;
 
 @Component({
     selector: 'app-neu',
@@ -119,7 +119,7 @@ export class NeuComponent {
         const isbn = (raw.isbn as string | undefined)?.trim();
         if (!isbn || !ISBN_PATTERN.test(isbn)) {
             alert(
-                'Bitte eine gueltige ISBN-13 im Format 978-x-xxxx-xxxx-x eingeben.',
+                'Bitte eine gueltige ISBN-13 (978/979, 13 Ziffern, Bindestriche/Leerzeichen optional) eingeben.',
             );
             this.loading = false;
             return;

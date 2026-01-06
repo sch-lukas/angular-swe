@@ -31,7 +31,7 @@
                     <input class="form-control" type="text" formControlName="isbn" />
                     @if (form.get('isbn')?.touched && form.get('isbn')?.errors) {
                         <div class="text-danger small mt-1">
-                            Format: 978-0-xxxx-xxxx-x (Bindestriche an den Stellen lassen, 13 Ziffern).
+                            ISBN-13: 978/979, 13 Ziffern, Bindestriche/Leerzeichen optional.
                         </div>
                     }
                 </div>

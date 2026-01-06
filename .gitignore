@@ -88,3 +88,4 @@ coverage
 /src/generated/prisma
 
 frontend/.angular/cache/
+frontend/.ignored_node_modules
