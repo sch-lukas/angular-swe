@@ -11,12 +11,9 @@ import { routes } from './app/app-routing.module';
 import { AppComponent } from './app/app.component';
 
 export function createApollo(httpLink: HttpLink) {
-    // Use relative URI so `ng serve --proxy-config` can forward requests to backend
-    // Keep the basic HttpLink simple (avoid passing complex headers here to satisfy types)
+
     const http = httpLink.create({ uri: '/graphql' });
 
-    // Do NOT add a global auth link here — individual requests (e.g. in
-    // NeuComponent) set the `Authorization` header via the operation context.
     return {
         link: http,
         cache: new InMemoryCache(),
